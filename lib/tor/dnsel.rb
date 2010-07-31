@@ -123,7 +123,14 @@ module Tor
       host = case host
         when IPAddr              then host.to_s
         when Resolv::IPv4::Regex then host
-        else RESOLVER.getaddress(host.to_s) # FIXME: returns IPv6 sometimes
+        else
+          begin
+            RESOLVER.getaddress(host.to_s) # FIXME: returns IPv6 sometimes
+          rescue NoMethodError
+            # This is a workaround for Ruby bug #2614:
+            # @see http://redmine.ruby-lang.org/issues/show/2614
+            raise Resolv::ResolvError.new("no address for #{host}")
+          end
       end
       reversed ? host.split('.').reverse.join('.') : host
     end
