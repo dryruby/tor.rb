@@ -1,5 +1,3 @@
-require 'ipaddr'
-
 if RUBY_VERSION < '1.8.7'
   # @see http://rubygems.org/gems/backports
   begin

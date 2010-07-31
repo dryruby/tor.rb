@@ -52,7 +52,7 @@ module Tor
     #   Tor::DNSEL.include?("208.75.57.100")    #=> true
     #   Tor::DNSEL.include?("1.2.3.4")          #=> false
     #
-    # @param  [IPAddr, String, #to_s]  host
+    # @param  [String, #to_s]          host
     # @param  [Hash{Symbol => Object}] options
     # @option options [String, #to_s]  :addr ("8.8.8.8")
     # @option options [Integer, #to_i] :port (53)
@@ -75,7 +75,7 @@ module Tor
     #   Tor::DNSEL.query("208.75.57.100")       #=> "127.0.0.2"
     #   Tor::DNSEL.query("1.2.3.4")             #=> Resolv::ResolvError
     #
-    # @param  [IPAddr, String, #to_s]  host
+    # @param  [String, #to_s]          host
     # @param  [Hash{Symbol => Object}] options
     # @option options [String, #to_s]  :addr ("8.8.8.8")
     # @option options [Integer, #to_i] :port (53)
@@ -91,7 +91,7 @@ module Tor
     # @example
     #   Tor::DNSEL.dnsname("1.2.3.4")           #=> "4.3.2.1.53.8.8.8.8.ip-port.exitlist.torproject.org"
     #
-    # @param  [IPAddr, String, #to_s]  host
+    # @param  [String, #to_s]          host
     # @param  [Hash{Symbol => Object}] options
     # @option options [String, #to_s]  :addr ("8.8.8.8")
     # @option options [Integer, #to_i] :port (53)
@@ -116,16 +116,21 @@ module Tor
     #   Tor::DNSEL.getaddress("1.2.3.4")        #=> "1.2.3.4"
     #   Tor::DNSEL.getaddress("1.2.3.4", true)  #=> "4.3.2.1"
     #
-    # @param  [IPAddr, String, #to_s]  host
-    # @param  [Boolean]                reversed
+    # @param  [String, #to_s] host
+    # @param  [Boolean]       reversed
     # @return [String]
     def self.getaddress(host, reversed = false)
-      host = case host
-        when IPAddr              then host.to_s
-        when Resolv::IPv4::Regex then host
+      host = case host.to_s
+        when Resolv::IPv6::Regex
+          raise ArgumentError.new("not an IPv4 address: #{host}")
+        when Resolv::IPv4::Regex
+          host.to_s
         else
           begin
-            RESOLVER.getaddress(host.to_s) # FIXME: returns IPv6 sometimes
+            RESOLVER.each_address(host.to_s) do |addr|
+              return addr.to_s if addr.to_s =~ Resolv::IPv4::Regex
+            end
+            raise Resolv::ResolvError.new("no address for #{host}")
           rescue NoMethodError
             # This is a workaround for Ruby bug #2614:
             # @see http://redmine.ruby-lang.org/issues/show/2614
