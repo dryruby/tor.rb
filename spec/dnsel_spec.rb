@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe Tor::DNSEL do
   before :all do
     $VERBOSE = nil # silence 'warning: already initialized constant' notices
-    Resolv::DNS::Config::InitialTimeout = (ENV['TIMEOUT'] || 0.01).to_f
+    Resolv::DNS::Config::InitialTimeout = (ENV['TIMEOUT'] || 0.1).to_f
   end
 
   describe "Tor::DNSEL.include?" do
