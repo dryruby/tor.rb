@@ -1,3 +1,5 @@
+require 'ipaddr'
+
 if RUBY_VERSION < '1.8.7'
   # @see http://rubygems.org/gems/backports
   begin
@@ -13,5 +15,6 @@ if RUBY_VERSION < '1.8.7'
 end
 
 module Tor
+  autoload :DNSEL,   'tor/dnsel'
   autoload :VERSION, 'tor/version'
 end
