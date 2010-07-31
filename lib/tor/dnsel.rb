@@ -45,8 +45,9 @@ module Tor
     ##
     # Returns `true` if the Tor DNSEL includes `host`, `false` otherwise.
     #
-    # If the DNS query times out, returns `nil` to indicate that we don't
-    # have a definitive answer.
+    # If the DNS server is unreachable or the DNS query times out, returns
+    # `nil` to indicate that we don't have a definitive answer one way or
+    # another.
     #
     # @example
     #   Tor::DNSEL.include?("208.75.57.100")    #=> true
@@ -63,6 +64,10 @@ module Tor
       rescue Resolv::ResolvError   # NXDOMAIN
         false
       rescue Resolv::ResolvTimeout
+        nil
+      rescue Errno::EHOSTUNREACH
+        nil
+      rescue Errno::EADDRNOTAVAIL
         nil
       end
     end
