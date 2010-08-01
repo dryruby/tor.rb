@@ -1,7 +1,7 @@
 module Tor
   module VERSION
     MAJOR = 0
-    MINOR = 0
+    MINOR = 1
     TINY  = 0
     EXTRA = nil
 
