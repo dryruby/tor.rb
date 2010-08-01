@@ -9,7 +9,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.homepage           = 'http://github.com/bendiken/tor-ruby'
   gem.license            = 'Public Domain' if gem.respond_to?(:license=)
   gem.summary            = 'Onion routing for Ruby.'
-  gem.description        = 'Tor.rb is a pure-Ruby library for interacting with the Tor onion routing network.'
+  gem.description        = 'Tor.rb is a pure-Ruby library for interacting with the Tor anonymity network.'
   gem.rubyforge_project  = 'cypherpunk'
 
   gem.author             = 'Arto Bendiken'
