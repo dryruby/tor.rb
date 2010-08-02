@@ -119,7 +119,7 @@ module Tor
     #
     # @return [void]
     def quit
-      send_command(:quit)
+      send_line('QUIT')
       reply = read_reply
       close
       reply
@@ -144,6 +144,7 @@ module Tor
     #   tor.authentication_method  #=> :cookie
     #
     # @return [Symbol]
+    # @since  0.1.2
     def authentication_method
       @authentication_method ||= begin
         method = nil

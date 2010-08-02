@@ -23,6 +23,28 @@ module Tor
   autoload :VERSION,    'tor/version'
 
   ##
+  # Returns `true` if the Tor process is running locally, `false` otherwise.
+  #
+  # This works by attempting to establish a Tor Control Protocol (TC)
+  # connection to the standard control port 9051 on `localhost`. If Tor
+  # hasn't been configured with the `ControlPort 9051` option, this will
+  # return `false`.
+  #
+  # @example
+  #   Tor.running?      #=> false
+  #
+  # @return [Boolean]
+  # @since  0.1.2
+  def self.running?
+    begin
+      Tor::Controller.new.quit
+      true
+    rescue Errno::ECONNREFUSED
+      false
+    end
+  end
+
+  ##
   # Returns `true` if Tor is available, `false` otherwise.
   #
   # @example
