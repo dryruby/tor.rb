@@ -82,9 +82,9 @@ module Tor
     # Returns `true` if the controller connection is active.
     #
     # @example
-    #   tor.connected?      #=> true
+    #   tor.connected?             #=> true
     #   tor.close
-    #   tor.connected?      #=> false
+    #   tor.connected?             #=> false
     #
     # @return [Boolean]
     def connected?
@@ -126,12 +126,49 @@ module Tor
     end
 
     ##
+    # Returns information about the authentication method required by the
+    # Tor process.
+    #
+    # This command may be used before authenticating.
+    #
+    # @example
+    #     C: PROTOCOLINFO
+    #     S: 250-PROTOCOLINFO 1
+    #     S: 250-AUTH METHODS=NULL
+    #     S: 250-VERSION Tor="0.2.1.25"
+    #     S: 250 OK
+    #
+    # @example
+    #   tor.authentication_method  #=> nil
+    #   tor.authentication_method  #=> :hashedpassword
+    #   tor.authentication_method  #=> :cookie
+    #
+    # @return [Symbol]
+    def authentication_method
+      @authentication_method ||= begin
+        method = nil
+        send_line('PROTOCOLINFO')
+        loop do
+          # TODO: support for reading multiple authentication methods
+          case reply = read_reply
+            when /^250-AUTH METHODS=(\w*)/
+              method = $1.strip.downcase.to_sym
+              method = method.eql?(:null) ? nil : method
+            when /^250-/  then next
+            when '250 OK' then break
+          end
+        end
+        method
+      end
+    end
+
+    ##
     # Returns `true` if the controller connection has been authenticated.
     #
     # @example
-    #   tor.authenticated?  #=> false
+    #   tor.authenticated?         #=> false
     #   tor.authenticate
-    #   tor.authenticated?  #=> true
+    #   tor.authenticated?         #=> true
     #
     # @return [Boolean]
     def authenticated?
@@ -169,7 +206,7 @@ module Tor
     #   S: 250 OK
     #
     # @example
-    #   tor.version         #=> "0.2.1.25"
+    #   tor.version                #=> "0.2.1.25"
     #
     # @return [String]
     def version
@@ -188,7 +225,7 @@ module Tor
     #   S: 250 OK
     #
     # @example
-    #   tor.config_file     #=> #<Pathname:/opt/local/etc/tor/torrc>
+    #   tor.config_file            #=> #<Pathname:/opt/local/etc/tor/torrc>
     #
     # @return [Pathname]
     def config_file
