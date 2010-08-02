@@ -1,3 +1,5 @@
+require 'pathname'
+
 if RUBY_VERSION < '1.8.7'
   # @see http://rubygems.org/gems/backports
   begin
@@ -15,8 +17,9 @@ end
 ##
 # @see https://www.torproject.org/
 module Tor
-  autoload :DNSEL,   'tor/dnsel'
-  autoload :VERSION, 'tor/version'
+  autoload :Controller, 'tor/control'
+  autoload :DNSEL,      'tor/dnsel'
+  autoload :VERSION,    'tor/version'
 
   ##
   # Returns `true` if Tor is available, `false` otherwise.

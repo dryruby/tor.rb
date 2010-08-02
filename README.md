@@ -10,6 +10,8 @@ Features
 
 * Supports checking whether Tor is installed in the user's current `PATH`,
   and if it is, returning the version number.
+* Supports querying and controlling a locally-running Tor process using the
+  [Tor Control Protocol (TC)][TC] over a socket connection.
 * Supports querying the [Tor DNS Exit List (DNSEL)][TorDNSEL] to determine
   whether a particular host is a Tor exit node or not.
 
@@ -23,6 +25,13 @@ Examples
 
     Tor.available?                                     #=> true
     Tor.version                                        #=> "0.2.1.25"
+
+### Obtaining information about a running Tor process
+
+    Tor::Controller.connect(:port => 9051) do |tor|
+      puts "Tor version: #{tor.version}"
+      puts "Tor config file: #{tor.config_file}"
+    end
 
 ### Checking whether a particular host is a Tor exit node
 
@@ -73,5 +82,6 @@ information, see <http://unlicense.org/> or the accompanying UNLICENSE file.
 
 [Tor]:       https://www.torproject.org/
 [TorDNSEL]:  https://www.torproject.org/tordnsel/
+[TC]:        http://gitweb.torproject.org/tor.git?a=blob_plain;hb=HEAD;f=doc/spec/control-spec.txt
 [OR]:        http://en.wikipedia.org/wiki/Onion_routing
 [Backports]: http://rubygems.org/gems/backports
