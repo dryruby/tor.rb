@@ -17,6 +17,7 @@ end
 ##
 # @see https://www.torproject.org/
 module Tor
+  autoload :Config,     'tor/config'
   autoload :Controller, 'tor/control'
   autoload :DNSEL,      'tor/dnsel'
   autoload :VERSION,    'tor/version'

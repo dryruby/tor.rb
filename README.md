@@ -10,10 +10,13 @@ Features
 
 * Supports checking whether Tor is installed in the user's current `PATH`,
   and if it is, returning the version number.
+* Supports parsing Tor configuration files and looking up the values of
+  particular options.
 * Supports querying and controlling a locally-running Tor process using the
   [Tor Control Protocol (TC)][TC] over a socket connection.
 * Supports querying the [Tor DNS Exit List (DNSEL)][TorDNSEL] to determine
   whether a particular host is a Tor exit node or not.
+* Compatible with Ruby 1.8.7+, Ruby 1.9.x, and JRuby 1.4/1.5.
 
 Examples
 --------
@@ -26,7 +29,22 @@ Examples
     Tor.available?                                     #=> true
     Tor.version                                        #=> "0.2.1.25"
 
-### Obtaining information about a running Tor process
+### Parsing the Tor configuration file (1)
+
+    torrc = Tor::Config.load("/etc/tor/torrc")
+
+### Parsing the Tor configuration file (2)
+
+    Tor::Config.open("/etc/tor/torrc") do |torrc|
+      puts "Tor SOCKS port: #{torrc['SocksPort']}"
+      puts "Tor control port: #{torrc['ControlPort']}"
+      puts "Tor exit policy:"
+      torrc.each('ExitPolicy') do |key, value|
+        puts "  #{value}"
+      end
+    end
+
+### Communicating with a running Tor process
 
     Tor::Controller.connect(:port => 9051) do |tor|
       puts "Tor version: #{tor.version}"
@@ -47,6 +65,7 @@ Dependencies
 ------------
 
 * [Ruby](http://ruby-lang.org/) (>= 1.8.7) or (>= 1.8.1 with [Backports][])
+* [Tor](https://www.torproject.org/download.html.en) (>= 0.2.1)
 
 Installation
 ------------
