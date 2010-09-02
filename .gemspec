@@ -16,7 +16,7 @@ GEMSPEC = Gem::Specification.new do |gem|
   gem.email              = 'or-talk@seul.org' # @see http://archives.seul.org/or/talk/
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS CONTRIBUTORS README UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
+  gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w()
   gem.default_executable = gem.executables.first
