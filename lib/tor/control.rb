@@ -190,7 +190,7 @@ module Tor
     # @raise  [AuthenticationError] if authentication failed
     def authenticate(cookie = nil)
       cookie ||= @options[:cookie]
-      send(:send_line, cookie ? "AUTHENTICATE #{cookie}" : "AUTHENTICATE")
+      send(:send_line, cookie ? "AUTHENTICATE \"#{cookie}\"" : "AUTHENTICATE")
       case reply = read_reply
         when '250 OK' then @authenticated = true
         else raise AuthenticationError.new(reply)
