@@ -236,6 +236,18 @@ module Tor
       Pathname(reply)
     end
 
+    ##
+    # Send a signal to the server
+    #
+    # @example
+    # tor.signal("newnym")
+    #
+    # @return [String] 
+    def signal(name)
+      send_command(:signal,name)
+      read_reply
+    end
+
   protected
 
     ##
