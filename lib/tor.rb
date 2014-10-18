@@ -65,8 +65,6 @@ module Tor
   def self.version
     if available? && `#{program_path} --version` =~ /Tor v(\d+)\.(\d+)\.(\d+)\.(\d+)/
       [$1, $2, $3, $4].join('.')
-    elsif available? && `#{program_path} --version` =~ /Tor version (\d+)\.(\d+)\.(\d+)\.(\d+) (.*)/
-      [$1, $2, $3, $4].join('.')
     end
   end
 
