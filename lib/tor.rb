@@ -17,10 +17,10 @@ end
 ##
 # @see https://www.torproject.org/
 module Tor
-  autoload :Config,     'tor/config'
-  autoload :Controller, 'tor/control'
-  autoload :DNSEL,      'tor/dnsel'
-  autoload :VERSION,    'tor/version'
+  require 'tor/config'
+  require 'tor/control'
+  require 'tor/dnsel'
+  require 'tor/version'
 
   ##
   # Returns `true` if the Tor process is running locally, `false` otherwise.
