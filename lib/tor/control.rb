@@ -237,6 +237,28 @@ module Tor
     end
 
     ##
+    # Returns the current (in-memory) Tor configuration.
+    # Response is terminated with a "."
+    #
+    # @example
+    #   C: GETINFO config-text
+    #   S: 250+config-text=
+    #   S: ControlPort 9051
+    #   S: RunAsDaemon 1
+    #   S: .
+    def config_text
+      send_command(:getinfo, 'config-text')
+      reply = ""
+      read_reply # skip "250+config-text="
+      while line = read_reply
+        break unless line != "."
+        reply.concat(line + "\n")
+      end
+      read_reply # skip "250 OK"
+      return reply
+    end
+
+    ##
     # Send a signal to the server
     #
     # @example
