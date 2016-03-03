@@ -264,9 +264,9 @@ module Tor
     # @example
     # tor.signal("newnym")
     #
-    # @return [String] 
+    # @return [String]
     def signal(name)
-      send_command(:signal,name)
+      send_command(:signal, name)
       read_reply
     end
 
