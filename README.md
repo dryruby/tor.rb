@@ -36,7 +36,7 @@ Examples
 ### Parsing the Tor configuration file (2)
 
     Tor::Config.open("/etc/tor/torrc") do |torrc|
-      puts "Tor SOCKS port: #{torrc['SocksPort']}"
+      puts "Tor SOCKS port: #{torrc['SOCKSPort']}"
       puts "Tor control port: #{torrc['ControlPort']}"
       puts "Tor exit policy:"
       torrc.each('ExitPolicy') do |key, value|
