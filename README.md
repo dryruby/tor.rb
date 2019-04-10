@@ -53,7 +53,7 @@ Examples
 
 ### Checking whether a particular host is a Tor exit node
 
-    Tor::DNSEL.include?("208.75.57.100")               #=> true
+    Tor::DNSEL.include?("185.220.101.21")               #=> true
     Tor::DNSEL.include?("1.2.3.4")                     #=> false
 
 Documentation

@@ -12,7 +12,7 @@ module Tor
   # policy.
   #
   # @example Checking source IP addresses
-  #   Tor::DNSEL.include?("208.75.57.100")               #=> true
+  #   Tor::DNSEL.include?("185.220.101.21")               #=> true
   #   Tor::DNSEL.include?("1.2.3.4")                     #=> false
   #
   # @example Checking source hostnames
@@ -20,12 +20,12 @@ module Tor
   #   Tor::DNSEL.include?("myhost.example.org")          #=> false
   #
   # @example Specifying an explicit target port
-  #   Tor::DNSEL.include?("208.75.57.100", :port => 80)  #=> true
-  #   Tor::DNSEL.include?("208.75.57.100", :port => 25)  #=> false
+  #   Tor::DNSEL.include?("185.220.101.21", :port => 80)  #=> true
+  #   Tor::DNSEL.include?("185.220.101.21", :port => 25)  #=> false
   #
   # @example Specifying an explicit target IP address and port
   #   Tor::DNSEL.include?(source_addr, :addr => target_addr, :port => target_port)
-  #   Tor::DNSEL.include?("208.75.57.100", :addr => myip, :port => myport)
+  #   Tor::DNSEL.include?("185.220.101.21", :addr => myip, :port => myport)
   #
   # @example Using from a Rack application
   #   Tor::DNSEL.include?(env['REMOTE_ADDR'] || env['REMOTE_HOST'], {
@@ -50,7 +50,7 @@ module Tor
     # another.
     #
     # @example
-    #   Tor::DNSEL.include?("208.75.57.100")    #=> true
+    #   Tor::DNSEL.include?("185.220.101.21")    #=> true
     #   Tor::DNSEL.include?("1.2.3.4")          #=> false
     #
     # @param  [String, #to_s]          host
@@ -77,7 +77,7 @@ module Tor
     # exit node and raising a `Resolv::ResolvError` if it isn't.
     #
     # @example
-    #   Tor::DNSEL.query("208.75.57.100")       #=> "127.0.0.2"
+    #   Tor::DNSEL.query("185.220.101.21")       #=> "127.0.0.2"
     #   Tor::DNSEL.query("1.2.3.4")             #=> Resolv::ResolvError
     #
     # @param  [String, #to_s]          host
