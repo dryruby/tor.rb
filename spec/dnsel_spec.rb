@@ -8,11 +8,11 @@ describe Tor::DNSEL do
 
   describe "Tor::DNSEL.include?" do
     it "returns true for exit nodes" do
-      Tor::DNSEL.include?('208.75.57.100').should be_true
+      expect(Tor::DNSEL.include?('185.220.101.21')).to be_truthy
     end
 
     it "returns false for non-exit nodes" do
-      Tor::DNSEL.include?('1.2.3.4').should be_false
+      expect(Tor::DNSEL.include?('1.2.3.4')).to be_falsey
     end
 
     it "returns nil on DNS timeouts" do
@@ -23,7 +23,7 @@ describe Tor::DNSEL do
             raise Resolv::ResolvTimeout
           end
         end
-        Tor::DNSEL.include?('1.2.3.4').should be_nil
+        expect(Tor::DNSEL.include?('1.2.3.4')).to be_nil
       ensure
         Tor::DNSEL::RESOLVER = Resolv::DefaultResolver
       end
@@ -32,59 +32,59 @@ describe Tor::DNSEL do
 
   describe "Tor::DNSEL.query" do
     it "returns '127.0.0.2' for exit nodes" do
-      Tor::DNSEL.query('208.75.57.100').should == '127.0.0.2'
+      expect Tor::DNSEL.query('185.220.101.21') == '127.0.0.2'
     end
 
     it "raises ResolvError for non-exit nodes" do
-      lambda { Tor::DNSEL.query('1.2.3.4') }.should raise_error(Resolv::ResolvError)
+      expect(lambda { Tor::DNSEL.query('1.2.3.4') }).to raise_error(Resolv::ResolvError)
     end
   end
 
   describe "Tor::DNSEL.dnsname without options" do
     it "returns the correct DNS name" do
-      Tor::DNSEL.dnsname('1.2.3.4').should == '4.3.2.1.53.8.8.8.8.ip-port.exitlist.torproject.org'
+      expect Tor::DNSEL.dnsname('1.2.3.4') == '4.3.2.1.53.8.8.8.8.ip-port.exitlist.torproject.org'
     end
   end
 
   describe "Tor::DNSEL.dnsname with a target port" do
     it "returns the correct DNS name" do
-      Tor::DNSEL.dnsname('1.2.3.4', :port => 25).should == '4.3.2.1.25.8.8.8.8.ip-port.exitlist.torproject.org'
+      expect Tor::DNSEL.dnsname('1.2.3.4', :port => 25) == '4.3.2.1.25.8.8.8.8.ip-port.exitlist.torproject.org'
     end
   end
 
   describe "Tor::DNSEL.dnsname with a target IP address" do
     it "returns the correct DNS name" do
-      Tor::DNSEL.dnsname('1.2.3.4', :addr => '8.8.4.4').should == '4.3.2.1.53.4.4.8.8.ip-port.exitlist.torproject.org'
+      expect Tor::DNSEL.dnsname('1.2.3.4', :addr => '8.8.4.4') == '4.3.2.1.53.4.4.8.8.ip-port.exitlist.torproject.org'
     end
   end
 
   describe "Tor::DNSEL.dnsname with a target IP address and port" do
     it "returns the correct DNS name" do
-      Tor::DNSEL.dnsname('1.2.3.4', :addr => '8.8.4.4', :port => 25).should == '4.3.2.1.25.4.4.8.8.ip-port.exitlist.torproject.org'
+      expect Tor::DNSEL.dnsname('1.2.3.4', :addr => '8.8.4.4', :port => 25) == '4.3.2.1.25.4.4.8.8.ip-port.exitlist.torproject.org'
     end
   end
 
   describe "Tor::DNSEL.getaddress" do
     it "resolves IPv4 addresses" do
-      Tor::DNSEL.getaddress('127.0.0.1').should == '127.0.0.1'
-      Tor::DNSEL.getaddress(IPAddr.new('127.0.0.1')).should == '127.0.0.1'
+      expect Tor::DNSEL.getaddress('127.0.0.1') == '127.0.0.1'
+      expect Tor::DNSEL.getaddress(IPAddr.new('127.0.0.1')) == '127.0.0.1'
     end
 
     it "resolves local hostnames" do
-      Tor::DNSEL.getaddress('localhost').should == '127.0.0.1'
+      expect Tor::DNSEL.getaddress('localhost') == '127.0.0.1'
     end
 
     it "resolves public hostnames" do
-      Tor::DNSEL.getaddress('google.com').should match(Resolv::IPv4::Regex)
+      expect(Tor::DNSEL.getaddress('google.com')).to match(Resolv::IPv4::Regex)
     end
 
     it "raises ArgumentError for IPv6 addresses" do
-      lambda { Tor::DNSEL.getaddress('::1') }.should raise_error(ArgumentError)
-      lambda { Tor::DNSEL.getaddress(IPAddr.new('::1')) }.should raise_error(ArgumentError)
+      expect(lambda { Tor::DNSEL.getaddress('::1') }).to raise_error(ArgumentError)
+      expect(lambda { Tor::DNSEL.getaddress(IPAddr.new('::1')) }).to raise_error(ArgumentError)
     end
 
     it "raises ResolvError for nonexistent hostnames" do
-      lambda { Tor::DNSEL.getaddress('foo.example.org') }.should raise_error(Resolv::ResolvError)
+      expect(lambda { Tor::DNSEL.getaddress('foo.example.org') }).to raise_error(Resolv::ResolvError)
     end
   end
 end

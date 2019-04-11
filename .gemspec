@@ -28,6 +28,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = ['Tor (>= 0.2.1.25)']
   gem.add_development_dependency 'yard',  '>= 0.6.0'
-  gem.add_development_dependency 'rspec', '>= 1.3.0'
+  gem.add_development_dependency 'rspec', '>= 3'
   gem.post_install_message       = nil
 end
