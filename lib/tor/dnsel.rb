@@ -1,49 +1,12 @@
 require 'resolv' unless defined?(Resolv)
 
 module Tor
-  ##
-  # Tor DNS Exit List (DNSEL) client.
-  #
-  # Unless the target IP address and port are explicitly specified, the
-  # query will be performed using a target IP address of "8.8.8.8" and a
-  # target port of 53. These correspond to the DNS protocol port on one of
-  # the [Google Public DNS](http://code.google.com/speed/public-dns/)
-  # servers, and they are guaranteed to be reachable from Tor's default exit
-  # policy.
-  #
-  # @example Checking source IP addresses
-  #   Tor::DNSEL.include?("185.220.101.21")               #=> true
-  #   Tor::DNSEL.include?("1.2.3.4")                     #=> false
-  #
-  # @example Checking source hostnames
-  #   Tor::DNSEL.include?("ennui.lostinthenoise.net")    #=> true
-  #   Tor::DNSEL.include?("myhost.example.org")          #=> false
-  #
-  # @example Specifying an explicit target port
-  #   Tor::DNSEL.include?("185.220.101.21", :port => 80)  #=> true
-  #   Tor::DNSEL.include?("185.220.101.21", :port => 25)  #=> false
-  #
-  # @example Specifying an explicit target IP address and port
-  #   Tor::DNSEL.include?(source_addr, :addr => target_addr, :port => target_port)
-  #   Tor::DNSEL.include?("185.220.101.21", :addr => myip, :port => myport)
-  #
-  # @example Using from a Rack application
-  #   Tor::DNSEL.include?(env['REMOTE_ADDR'] || env['REMOTE_HOST'], {
-  #     :addr => env['SERVER_NAME'],
-  #     :port => env['SERVER_PORT'],
-  #   })
-  #
-  # @see https://www.torproject.org/tordnsel/
-  # @see https://trac.torproject.org/projects/tor/wiki/TheOnionRouter/TorDNSExitList
-  # @see http://gitweb.torproject.org/tor.git?a=blob_plain;hb=HEAD;f=doc/contrib/torel-design.txt
   module DNSEL
     RESOLVER    = Resolv::DefaultResolver unless defined?(RESOLVER)
-    TARGET_ADDR = '8.8.8.8'.freeze        unless defined?(TARGET_ADDR)     # Google Public DNS
-    TARGET_PORT = 53                      unless defined?(TARGET_PORT)     # DNS
-    DNS_SUFFIX  = 'ip-port.exitlist.torproject.org'.freeze
+    DNS_SUFFIX  = 'dnsel.torproject.org'.freeze
 
     ##
-    # Returns `true` if the Tor DNSEL includes `host`, `false` otherwise.
+    # Returns `true` if `host` is a Tor Exit Node, `false` otherwise.
     #
     # If the DNS server is unreachable or the DNS query times out, returns
     # `nil` to indicate that we don't have a definitive answer one way or
@@ -54,13 +17,10 @@ module Tor
     #   Tor::DNSEL.include?("1.2.3.4")          #=> false
     #
     # @param  [String, #to_s]          host
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [String, #to_s]  :addr ("8.8.8.8")
-    # @option options [Integer, #to_i] :port (53)
     # @return [Boolean]
-    def self.include?(host, options = {})
+    def self.include?(host)
       begin
-        query(host, options) == '127.0.0.2'
+        query(host) == '127.0.0.2'
       rescue Resolv::ResolvError   # NXDOMAIN
         false
       rescue Resolv::ResolvTimeout
@@ -81,31 +41,23 @@ module Tor
     #   Tor::DNSEL.query("1.2.3.4")             #=> Resolv::ResolvError
     #
     # @param  [String, #to_s]          host
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [String, #to_s]  :addr ("8.8.8.8")
-    # @option options [Integer, #to_i] :port (53)
     # @return [String]
     # @raise  [Resolv::ResolvError] for an NXDOMAIN response
-    def self.query(host, options = {})
-      getaddress(dnsname(host, options))
+    def self.query(host)
+      getaddress(dnsname(host))
     end
 
     ##
     # Returns the DNS name used for Tor DNSEL queries of `host`.
     #
     # @example
-    #   Tor::DNSEL.dnsname("1.2.3.4")           #=> "4.3.2.1.53.8.8.8.8.ip-port.exitlist.torproject.org"
+    #   Tor::DNSEL.dnsname("1.2.3.4")           #=> "4.3.2.1.dnsel.torproject.org"
     #
     # @param  [String, #to_s]          host
-    # @param  [Hash{Symbol => Object}] options
-    # @option options [String, #to_s]  :addr ("8.8.8.8")
-    # @option options [Integer, #to_i] :port (53)
     # @return [String]
-    def self.dnsname(host, options = {})
+    def self.dnsname(host)
       source_addr = getaddress(host, true)
-      target_addr = getaddress(options[:addr] || TARGET_ADDR, true)
-      target_port = options[:port] || TARGET_PORT
-      [source_addr, target_port, target_addr, DNS_SUFFIX].join('.')
+      "#{source_addr}.#{DNS_SUFFIX}"
     end
     class << self; alias_method :hostname, :dnsname; end
 
