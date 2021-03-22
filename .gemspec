@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
 
   gem.name               = 'tor'
   gem.homepage           = 'http://cypherpunk.rubyforge.org/tor/'
-  gem.license            = 'Public Domain' if gem.respond_to?(:license=)
+  gem.license            = 'Unlicense' if gem.respond_to?(:license=)
   gem.summary            = 'Onion routing for Ruby.'
   gem.description        = 'Tor.rb is a Ruby library for interacting with the Tor anonymity network.'
   gem.rubyforge_project  = 'cypherpunk'
@@ -22,7 +22,6 @@ Gem::Specification.new do |gem|
   gem.require_paths      = %w(lib)
   gem.extensions         = %w()
   gem.test_files         = %w()
-  gem.has_rdoc           = false
 
   gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = ['Tor (>= 0.2.1.25)']
