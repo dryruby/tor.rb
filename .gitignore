@@ -3,3 +3,5 @@
 .yardoc
 pkg
 tmp
+Gemfile.lock
+
