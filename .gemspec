@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w()
-  gem.default_executable = gem.executables.first
   gem.require_paths      = %w(lib)
   gem.extensions         = %w()
   gem.test_files         = %w()
@@ -27,7 +26,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version      = '>= 1.8.1'
   gem.requirements               = ['Tor (>= 0.2.1.25)']
-  gem.add_development_dependency 'yard',  '>= 0.6.0'
-  gem.add_development_dependency 'rspec', '>= 3'
+  gem.add_development_dependency 'yard',  '~> 0.6', '>= 0.6.0'
+  gem.add_development_dependency 'rspec', '~> 3'
   gem.post_install_message       = nil
 end
