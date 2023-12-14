@@ -10,13 +10,12 @@ Gem::Specification.new do |gem|
   gem.license            = 'Unlicense' if gem.respond_to?(:license=)
   gem.summary            = 'Onion routing for Ruby.'
   gem.description        = 'Tor.rb is a Ruby library for interacting with the Tor anonymity network.'
-  gem.rubyforge_project  = 'cypherpunk'
 
   gem.author             = 'Arto Bendiken'
   gem.email              = 'or-talk@seul.org' # @see http://archives.seul.org/or/talk/
 
   gem.platform           = Gem::Platform::RUBY
-  gem.files              = %w(AUTHORS CREDITS README UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
+  gem.files              = %w(AUTHORS CREDITS README.md UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
   gem.bindir             = %q(bin)
   gem.executables        = %w()
   gem.require_paths      = %w(lib)
