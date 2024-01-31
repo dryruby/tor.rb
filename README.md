@@ -56,11 +56,6 @@ Examples
     Tor::DNSEL.include?("185.220.101.21")               #=> true
     Tor::DNSEL.include?("1.2.3.4")                     #=> false
 
-Documentation
--------------
-
-* <http://cypherpunk.rubyforge.org/tor/>
-
 Dependencies
 ------------
 
