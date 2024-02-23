@@ -47,9 +47,9 @@ module Tor
         File.open(filename.to_s, 'rb') do |file|
           file.each_line do |line|
             case line = line.strip.chomp.strip
-              when ''   then next # skip empty lines
-              when /^#/ then next # skip comments
-              else line = line.split('#').first.strip
+            when ''   then next # skip empty lines
+            when /^#/ then next # skip comments
+            else line = line.split('#').first.strip
             end
             # TODO: support for unquoting and unescaping values
             config << line.split(/\s+/, 2)
@@ -97,6 +97,7 @@ module Tor
     # @return [Enumerator]
     def each(key = nil, &block)
       return enum_for(:each, key) unless block_given?
+
       key ? @lines.find_all { |k, v| key === k }.each(&block) : @lines.each(&block)
     end
   end

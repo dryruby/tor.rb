@@ -26,5 +26,5 @@ Gem::Specification.new do |gem|
   gem.requirements               = ['Tor (>= 0.2.1.25)']
   gem.add_development_dependency 'yard',  '~> 0.6', '>= 0.6.0'
   gem.add_development_dependency 'rspec', '~> 3'
-  gem.post_install_message       = nil
+  gem.post_install_message = nil
 end

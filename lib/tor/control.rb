@@ -152,11 +152,11 @@ module Tor
         loop do
           # TODO: support for reading multiple authentication methods
           case reply = read_reply
-            when /^250-AUTH METHODS=(\w*)/
-              method = $1.strip.downcase.to_sym
-              method = method.eql?(:null) ? nil : method
-            when /^250-/  then next
-            when '250 OK' then break
+          when /^250-AUTH METHODS=(\w*)/
+            method = $1.strip.downcase.to_sym
+            method = method.eql?(:null) ? nil : method
+          when /^250-/  then next
+          when '250 OK' then break
           end
         end
         method
@@ -192,8 +192,8 @@ module Tor
       cookie ||= @options[:cookie]
       send(:send_line, cookie ? "AUTHENTICATE #{cookie}" : "AUTHENTICATE")
       case reply = read_reply
-        when '250 OK' then @authenticated = true
-        else raise AuthenticationError.new(reply)
+      when '250 OK' then @authenticated = true
+      else raise AuthenticationError.new(reply)
       end
       self
     end
@@ -252,6 +252,7 @@ module Tor
       read_reply # skip "250+config-text="
       while line = read_reply
         break unless line != "."
+
         reply.concat(line + "\n")
       end
       read_reply # skip "250 OK"
@@ -270,7 +271,7 @@ module Tor
       read_reply
     end
 
-  protected
+    protected
 
     ##
     # Sends a command line over the socket.
