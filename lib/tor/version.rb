@@ -2,7 +2,7 @@ module Tor
   module VERSION
     MAJOR = 0
     MINOR = 1
-    TINY  = 4
+    TINY  = 7
     EXTRA = nil
 
     STRING = [MAJOR, MINOR, TINY, EXTRA].compact.join('.')
