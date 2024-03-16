@@ -18,7 +18,7 @@ module Tor
   # @see   https://www.torproject.org/tor-manual.html.en
   # @since 0.1.2
   class Config
-    CONFDIR = '/etc/tor' unless defined?(CONFDIR)
+    CONFIG_DIR = '/etc/tor' unless defined?(CONFIG_DIR)
 
     ##
     # Opens a Tor configuration file.
@@ -70,10 +70,10 @@ module Tor
     ##
     # Appends a new configuration option.
     #
-    # @param  [Array(String, String)]
+    # @param [Array(String, String)] option
     # @return [Config]
-    def <<(kv)
-      @lines << kv
+    def <<(option)
+      @lines << option
       self
     end
 
@@ -81,7 +81,7 @@ module Tor
     # Looks up the last value of a particular configuration option.
     #
     # @param  [String, Regexp] key
-    # @return [String]
+    # @return [String, nil]
     def [](key)
       values = each(key).map(&:last)
       values.empty? ? nil : values.last
@@ -98,7 +98,11 @@ module Tor
     def each(key = nil, &block)
       return enum_for(:each, key) unless block_given?
 
-      key ? @lines.find_all { |k, v| key === k }.each(&block) : @lines.each(&block)
+      if key
+        @lines.find_all { |k, v| key === k }.each(&block)
+      else
+        @lines.each(&block)
+      end
     end
   end
 end

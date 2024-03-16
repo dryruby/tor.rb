@@ -5,6 +5,7 @@ require 'rubygems'
 begin
   require 'rakefile' # http://github.com/bendiken/rakefile
 rescue LoadError => e
+  # pass
 end
 require 'tor'
 

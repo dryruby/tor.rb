@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe Tor::DNSEL do
   before :all do
     $VERBOSE = nil # silence 'warning: already initialized constant' notices
-    Resolv::DNS::Config::InitialTimeout = (ENV['TIMEOUT'] || 0.1).to_f
+    Resolv::DNS::Config::InitialTimeout = (ENV['TIMEOUT'] || 1).to_i
   end
 
   describe "Tor::DNSEL.include?" do
@@ -32,28 +32,28 @@ describe Tor::DNSEL do
 
   describe "Tor::DNSEL.query" do
     it "returns '127.0.0.2' for exit nodes" do
-      expect Tor::DNSEL.query('185.220.101.21') == '127.0.0.2'
+      expect(Tor::DNSEL.query('185.220.101.21')).to eq('127.0.0.2')
     end
 
     it "raises ResolvError for non-exit nodes" do
-      expect(lambda { Tor::DNSEL.query('1.2.3.4') }).to raise_error(Resolv::ResolvError)
+      expect { Tor::DNSEL.query('1.2.3.4') }.to raise_error(Resolv::ResolvError)
     end
   end
 
   describe "Tor::DNSEL.dnsname" do
     it "returns the correct DNS name" do
-      expect Tor::DNSEL.dnsname('1.2.3.4') == '4.3.2.1.dnsel.torproject.org'
+      expect(Tor::DNSEL.dnsname('1.2.3.4')).to eq('4.3.2.1.dnsel.torproject.org')
     end
   end
 
   describe "Tor::DNSEL.getaddress" do
     it "resolves IPv4 addresses" do
-      expect Tor::DNSEL.getaddress('127.0.0.1') == '127.0.0.1'
-      expect Tor::DNSEL.getaddress(IPAddr.new('127.0.0.1')) == '127.0.0.1'
+      expect(Tor::DNSEL.getaddress('127.0.0.1')).to eq('127.0.0.1')
+      expect(Tor::DNSEL.getaddress(IPAddr.new('127.0.0.1'))).to eq('127.0.0.1')
     end
 
     it "resolves local hostnames" do
-      expect Tor::DNSEL.getaddress('localhost') == '127.0.0.1'
+      expect(Tor::DNSEL.getaddress('localhost')).to eq('127.0.0.1')
     end
 
     it "resolves public hostnames" do
@@ -61,12 +61,12 @@ describe Tor::DNSEL do
     end
 
     it "raises ArgumentError for IPv6 addresses" do
-      expect(lambda { Tor::DNSEL.getaddress('::1') }).to raise_error(ArgumentError)
-      expect(lambda { Tor::DNSEL.getaddress(IPAddr.new('::1')) }).to raise_error(ArgumentError)
+      expect { Tor::DNSEL.getaddress('::1') }.to raise_error(ArgumentError)
+      expect { Tor::DNSEL.getaddress(IPAddr.new('::1')) }.to raise_error(ArgumentError)
     end
 
     it "raises ResolvError for nonexistent hostnames" do
-      expect(lambda { Tor::DNSEL.getaddress('foo.example.org') }).to raise_error(Resolv::ResolvError)
+      expect { Tor::DNSEL.getaddress('foo.example.org') }.to raise_error(Resolv::ResolvError)
     end
   end
 end

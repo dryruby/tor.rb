@@ -53,7 +53,7 @@ Examples
 
 ### Checking whether a particular host is a Tor exit node
 
-    Tor::DNSEL.include?("185.220.101.21")               #=> true
+    Tor::DNSEL.include?("185.220.101.21")              #=> true
     Tor::DNSEL.include?("1.2.3.4")                     #=> false
 
 Dependencies
@@ -86,7 +86,12 @@ as follows:
 Author
 ------
 
-* [Arto Bendiken](mailto:arto.bendiken@gmail.com) - <http://ar.to/>
+* [Arto Bendiken](mailto:arto.bendiken@gmail.com) - <https://ar.to>
+
+Maintenance
+-----------
+
+* [Łukasz Wieczorek](mailto:wieczorek1990@gmail.com) - <https://soiree.tech>
 
 License
 -------
